@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './Main.css';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,8 +16,8 @@ import AddIcon from '@mui/icons-material/Add';
 export default function Main({ tablerows }) {
   return (
     <div className='main'>
-      <Button variant="contained" sx={{marginBottom: '50px'}} endIcon={<AddIcon />}>Добавить</Button>
       <div className="main__table">
+        <Button variant="contained" sx={{ marginBottom: '50px' }} endIcon={<AddIcon />}>Добавить</Button>
         <TableContainer component={Paper} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '80vw' }}>
           <Table aria-label="simple table">
             <TableHead>
