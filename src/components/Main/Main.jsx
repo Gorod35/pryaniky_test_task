@@ -12,12 +12,33 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import InputPopup from '../InputPopup/InputPopup.jsx';
 
 export default function Main({ tablerows }) {
+
+  const [formIsOpen, setFormIsOpen] = React.useState(false);
+
+  const handleFormClick = (id) => {
+    setFormIsOpen(true);
+    // let cell = e.target.parentNode.parentNode.parentNode;
+    // console.log(tablerows);
+
+    // if (cell.tagName.toLowerCase() !== 'td') return;
+
+    console.log(id)
+
+
+  }
+
+  const handleCloseForm = () => {
+    setFormIsOpen(false);
+  }
+
   return (
     <div className='main'>
+      <InputPopup isOpen={formIsOpen} onClose={handleCloseForm}/>
       <div className="main__table">
-        <Button variant="contained" sx={{ marginBottom: '50px' }} endIcon={<AddIcon />}>Добавить</Button>
+        <Button onClick={handleFormClick} variant="contained" sx={{ marginBottom: '50px' }} endIcon={<AddIcon />}>Добавить</Button>
         <TableContainer component={Paper} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '80vw' }}>
           <Table aria-label="simple table">
             <TableHead>
@@ -36,7 +57,7 @@ export default function Main({ tablerows }) {
             </TableHead>
             <TableBody>
               {tablerows.map((row) => (
-                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell align="center">{row.documentName}</TableCell>
                   <TableCell align="center">{row.documentStatus}</TableCell>
                   <TableCell align="center">{row.documentType}</TableCell>
@@ -45,8 +66,8 @@ export default function Main({ tablerows }) {
                   <TableCell align="center">{row.companySigDate}</TableCell>
                   <TableCell align="center">{row.employeeSignatureName}</TableCell>
                   <TableCell align="center">{row.employeeSigDate}</TableCell>
-                  <TableCell align="center"><IconButton aria-label="delete"><EditIcon /></IconButton></TableCell>
-                  <TableCell align="center"><IconButton aria-label="delete"><DeleteIcon /></IconButton></TableCell>
+                  <TableCell align="center" onClick={() => handleFormClick(row.id)}><IconButton aria-label="Изменить"><EditIcon /></IconButton></TableCell>
+                  <TableCell align="center"><IconButton aria-label="Удалить"><DeleteIcon /></IconButton></TableCell>
                 </TableRow>
               ))}
             </TableBody>

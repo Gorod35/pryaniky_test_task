@@ -72,9 +72,9 @@ function App() {
     }
   }, [loggedIn])
 
-  React.useEffect(() => {
-    console.log(isInfoTooltipOpen);
-  }, [isInfoTooltipOpen])
+  const closeInfoToolTip = () => {
+    setIsInfoTooltipOpen(false);
+  }
 
 
   return (
@@ -84,7 +84,7 @@ function App() {
         <Route path='/login' element={<Login onLogin={handleLoginClick} />} />
       </Routes>
       <Preloader isOpen={isLoading} />
-      <InfoToolTip isOpen={isInfoTooltipOpen} />
+      <InfoToolTip isOpen={isInfoTooltipOpen} onClose={closeInfoToolTip}/>
     </div>
   );
 }
