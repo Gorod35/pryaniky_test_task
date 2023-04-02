@@ -15,15 +15,16 @@ import Button from '@mui/material/Button';
 export default function Login( { onLogin }) {
     const [showPassword, setShowPassword] = React.useState(false);
 
-    const [username, setUserName] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [values, setValues] = React.useState({});
+    const [errors, setErrors] = React.useState({});
+    const [isValid, setIsValid] = React.useState(false);
 
-    const handleLoginChange = (e) => {
-        setUserName(e.target.value);
-    }
+    const handleChange = (e) => {
+        const input = e.target;
+        const { value, name } = input;
+        setValues({ ...values, [name]: value });
 
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
+        ((values.username) && values.password) ? setIsValid(true) : setIsValid(false);
     }
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -34,7 +35,7 @@ export default function Login( { onLogin }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onLogin({ username, password })
+        onLogin(values);
     }
 
     return (
@@ -45,9 +46,9 @@ export default function Login( { onLogin }) {
 
                 <Typography variant="h1" gutterBottom sx={{ textAlign: 'center', fontSize: '30px' }}>Добро пожаловать</Typography>
 
-                <TextField required id="outlined-required" label="Логин" variant="outlined" onChange={handleLoginChange} value={username}/>
+                <TextField required error={values.username === '' ? true : false} helperText={values.username === '' ? 'Поле не должно быть пустым' : ''} name='username' id="outlined-required" label="Логин" variant="outlined" onChange={handleChange} value={values.username}/>
 
-                <FormControl variant="outlined" onChange={handlePasswordChange}  value={password} required>
+                <FormControl name='password' variant="outlined" onChange={handleChange}  value={values.password} required>
                     <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
                     <OutlinedInput
                         id="outlined-adornment-password"
@@ -65,10 +66,11 @@ export default function Login( { onLogin }) {
                             </InputAdornment>
                         }
                         label="Password"
+                        name='password'
                     />
                 </FormControl>
 
-                <Button type='submit' variant="contained" sx={{ height: '56px', fontSize: '16px', marginTop: '50px' }}>Войти</Button>
+                <Button disabled={!isValid} type='submit' variant="contained" sx={{ height: '56px', fontSize: '16px', marginTop: '50px' }}>Войти</Button>
             </Box>
         </main>
     )

@@ -4,77 +4,28 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { inputs } from '../../utils/constants.jsx';
 
-export default function FormDialog( { isOpen, onClose }) {
-  const [open, setOpen] = React.useState(false);
+export default function FormDialog( { handleAddRowClick, handleEditRowClick, isOpen, onClose, handleChange, values, isEditClick, isValid }) {
 
-  const handleClose = () => {
-    setOpen(false);
-    onClose();
-  };
-
-  React.useEffect(() => {
-    (isOpen) ? setOpen(true) : setOpen(false)
-  }, [isOpen])
+  const ifFormValue = (value) => {
+    if ((value.id === 'companySigDate') || (value.id === 'employeeSigDate')) {
+      return false;
+    }
+    return true;
+  }
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={isOpen} onClose={onClose}>
         <DialogContent sx={{minWidth: '420px'}}>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Название документа"
-            fullWidth
-            variant="standard"
-            required
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="status"
-            label="Статус документа"
-            fullWidth
-            variant="standard"
-            required
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="type"
-            label="Тип документа"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="numberOfEmployee"
-            label="Номер сотрудника"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="companySign"
-            label="Подпись компании"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="employeeSign"
-            label="Подпись сотрудника"
-            fullWidth
-            variant="standard"
-          />
+          {inputs.filter(ifFormValue).map((input) =>  (
+            <TextField key={input.id} {...input} value={values[input.name]} onChange={handleChange} autoFocus margin="dense" fullWidth variant="standard"/>
+          ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Отменить</Button>
-          <Button onClick={handleClose}>Добавить</Button>
+          <Button onClick={onClose}>Отменить</Button>
+          <Button disabled={!isValid} onClick={isEditClick ? handleEditRowClick : handleAddRowClick}>{isEditClick ? 'Изменить' : 'Добавить'}</Button>
         </DialogActions>
       </Dialog>
     </div>

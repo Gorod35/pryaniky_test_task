@@ -13,46 +13,75 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import InputPopup from '../InputPopup/InputPopup.jsx';
+import { InitialValues, inputs } from '../../utils/constants.jsx';
 
-export default function Main({ tablerows }) {
+export default function Main({ tablerows, onAddRow, onDeleteRow, onEditRow, isSuccess }) {
 
   const [formIsOpen, setFormIsOpen] = React.useState(false);
+  const [isEditClick, setIsEditClick] = React.useState(false);
+  const [rowId, setRowId] = React.useState();
+  const [isValid, setIsValid] = React.useState(false);
 
-  const handleFormClick = (id) => {
+  const [values, setValues] = React.useState(InitialValues);
+
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+
+    (values.documentName && values.documentStatus) ? setIsValid(true) : setIsValid(false);
+
+  }
+
+  const handleEditClick = (id) => {
+    setRowId(id);
     setFormIsOpen(true);
-    // let cell = e.target.parentNode.parentNode.parentNode;
-    // console.log(tablerows);
+    setIsEditClick(true);
+    const found = tablerows.find(obj => {
+      return obj.id === id;
+    })
+    setValues(found);
+  }
 
-    // if (cell.tagName.toLowerCase() !== 'td') return;
-
-    console.log(id)
-
-
+  const handleAddClick = () => {
+    setFormIsOpen(true);
   }
 
   const handleCloseForm = () => {
     setFormIsOpen(false);
+    isEditClick
+      &&
+      setValues(InitialValues)
+    setIsEditClick(false);
   }
+
+  const handleAddRowClick = () => {
+    onAddRow(values);
+    handleCloseForm();
+    isSuccess && setValues(InitialValues)
+  }
+
+  const handleDeleteRowClick = (id) => {
+    onDeleteRow(id);
+  }
+
+  const handleEditRowClick = () => {
+    onEditRow(rowId, values);
+    handleCloseForm();
+  }
+
+  
 
   return (
     <div className='main'>
-      <InputPopup isOpen={formIsOpen} onClose={handleCloseForm}/>
+      <InputPopup handleAddRowClick={handleAddRowClick} handleEditRowClick={handleEditRowClick} isOpen={formIsOpen} onClose={handleCloseForm} tablerows={tablerows} handleChange={handleChange} values={values} isEditClick={isEditClick} isValid={isValid}/>
       <div className="main__table">
-        <Button onClick={handleFormClick} variant="contained" sx={{ marginBottom: '50px' }} endIcon={<AddIcon />}>Добавить</Button>
+        <Button onClick={handleAddClick} variant="contained" sx={{ marginBottom: '50px' }} endIcon={<AddIcon />}>Добавить</Button>
         <TableContainer component={Paper} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '80vw' }}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">Название документа</TableCell>
-                <TableCell align="center">Статус документа</TableCell>
-                <TableCell align="center">Тип документа</TableCell>
-                <TableCell align="center">Номер сотрудника</TableCell>
-                <TableCell align="center">Подпись компании</TableCell>
-                <TableCell align="center">Дата подписи компании</TableCell>
-                <TableCell align="center">Подпись сотрудника</TableCell>
-                <TableCell align="center">Дата подписи сотрудника</TableCell>
-                <TableCell align="center">Изменить запись</TableCell>
-                <TableCell align="center">Удалить запись</TableCell>
+                {inputs.map((input) => (
+                  <TableCell align="center">{input.label}</TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -66,8 +95,8 @@ export default function Main({ tablerows }) {
                   <TableCell align="center">{row.companySigDate}</TableCell>
                   <TableCell align="center">{row.employeeSignatureName}</TableCell>
                   <TableCell align="center">{row.employeeSigDate}</TableCell>
-                  <TableCell align="center" onClick={() => handleFormClick(row.id)}><IconButton aria-label="Изменить"><EditIcon /></IconButton></TableCell>
-                  <TableCell align="center"><IconButton aria-label="Удалить"><DeleteIcon /></IconButton></TableCell>
+                  <TableCell align="center" onClick={() => handleEditClick(row.id)}><IconButton aria-label="Изменить"><EditIcon /></IconButton></TableCell>
+                  <TableCell align="center" onClick={() => handleDeleteRowClick(row.id)}><IconButton aria-label="Удалить"><DeleteIcon /></IconButton></TableCell>
                 </TableRow>
               ))}
             </TableBody>
