@@ -68,14 +68,14 @@ export default function Main({ tablerows, onAddRow, onDeleteRow, onEditRow, isSu
     handleCloseForm();
   }
 
-  
+
 
   return (
     <div className='main'>
-      <InputPopup handleAddRowClick={handleAddRowClick} handleEditRowClick={handleEditRowClick} isOpen={formIsOpen} onClose={handleCloseForm} tablerows={tablerows} handleChange={handleChange} values={values} isEditClick={isEditClick} isValid={isValid}/>
+      <InputPopup handleAddRowClick={handleAddRowClick} handleEditRowClick={handleEditRowClick} isOpen={formIsOpen} onClose={handleCloseForm} tablerows={tablerows} handleChange={handleChange} values={values} isEditClick={isEditClick} isValid={isValid} />
       <div className="main__table">
         <Button onClick={handleAddClick} variant="contained" sx={{ marginBottom: '50px' }} endIcon={<AddIcon />}>Добавить</Button>
-        <TableContainer component={Paper} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '80vw' }}>
+        <TableContainer component={Paper} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '81.25vw' }}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
