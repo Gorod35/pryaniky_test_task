@@ -42,7 +42,7 @@ export default function Login( { onLogin }) {
         <main className="login">
 
 
-            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', maxWidth: '396px', gap: '20px', margin: '0px 20px 0px 20px' }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', width: '90vw', maxWidth: '396px', gap: '20px', margin: '0px 20px 0px 20px' }}>
 
                 <Typography variant="h1" gutterBottom sx={{ textAlign: 'center', fontSize: '30px' }}>Добро пожаловать</Typography>
 
