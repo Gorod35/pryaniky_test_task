@@ -9,6 +9,7 @@ import { api } from '../../utils/Api';
 import Header from '../Header/Header.jsx';
 import Preloader from '../Preloader/Preloader.jsx';
 import InfoToolTip from '../InfoToolTip/InfoToolTip.jsx';
+import NotFound from '../NotFound/NotFound.jsx';
 
 function App() {
 
@@ -124,12 +125,17 @@ function App() {
       .finally(() => setIsLoading(false));
   }
 
+  const goBack = () => {
+    navigate(-1);
+  }
+
 
   return (
     <div className="App">
       <Routes>
         <Route path='/' element={loggedIn ? <><Header onExit={handleExitClick} /><Main tablerows={rows} onAddRow={handleAddRowClick} onDeleteRow={handleDeleteRowClick} onEditRow={handleEditRowClick} isSuccess={success} /></> : <InfoLoginPage onAuthorization={handleAuthorizationClick} />} />
         <Route path='/login' element={<Login onLogin={handleLoginClick} />} />
+        <Route path='*' element={<NotFound onBack={goBack}/>} />
       </Routes>
       <Preloader isOpen={isLoading} />
       <InfoToolTip isOpen={isInfoTooltipOpen} onClose={closeInfoToolTip} />
