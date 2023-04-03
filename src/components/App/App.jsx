@@ -17,14 +17,15 @@ function App() {
 
   const handleLoginClick = ({ username, password }) => {
     handleLogin(username, password);
-    // navigate('/app');
   }
 
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [rows, setRows] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-  const [success, setSuccess] = React.useState(true);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState({
+    isOpen: false,
+    text: ''
+  });
 
   const handleAuthorizationClick = () => {
     navigate('/login');
@@ -41,7 +42,10 @@ function App() {
         }
       })
       .catch((err) => {
-        setIsInfoTooltipOpen(true);
+        setIsInfoTooltipOpen({
+          isOpen: true,
+          text: 'Вы ввели неверный логин или пароль. Попробуйте ещё раз.'
+        });
       })
       .finally(() => setIsLoading(false));
   }
@@ -72,7 +76,10 @@ function App() {
   }, [loggedIn])
 
   const closeInfoToolTip = () => {
-    setIsInfoTooltipOpen(false);
+    setIsInfoTooltipOpen({
+      isOpen: false,
+      text: ''
+    });
   }
 
   const handleAddRowClick = (values) => {
@@ -80,11 +87,12 @@ function App() {
     api.addRow(values)
       .then((res) => {
         setRows([...rows, res.data]);
-        setSuccess(true);
       })
       .catch((err) => {
-        setIsInfoTooltipOpen(true);
-        setSuccess(false);
+        setIsInfoTooltipOpen({
+          isOpen: true,
+          text: 'Что-то пошло не так. Попробуйте ещё раз.'
+        });
       })
       .finally(() => setIsLoading(false));
   }
@@ -98,8 +106,10 @@ function App() {
         }
       })
       .catch((err) => {
-        setIsInfoTooltipOpen(true);
-        setSuccess(false);
+        setIsInfoTooltipOpen({
+          isOpen: true,
+          text: 'Что-то пошло не так. Попробуйте ещё раз.'
+        });
       })
       .finally(() => setIsLoading(false));
   }
@@ -119,8 +129,10 @@ function App() {
         }
       })
       .catch((err) => {
-        setIsInfoTooltipOpen(true);
-        setSuccess(false);
+        setIsInfoTooltipOpen({
+          isOpen: true,
+          text: 'Что-то пошло не так. Попробуйте ещё раз.'
+        });
       })
       .finally(() => setIsLoading(false));
   }
@@ -133,12 +145,12 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={loggedIn ? <><Header onExit={handleExitClick} /><Main tablerows={rows} onAddRow={handleAddRowClick} onDeleteRow={handleDeleteRowClick} onEditRow={handleEditRowClick} isSuccess={success} /></> : <InfoLoginPage onAuthorization={handleAuthorizationClick} />} />
+        <Route path='/' element={loggedIn ? <><Header onExit={handleExitClick} /><Main tablerows={rows} onAddRow={handleAddRowClick} onDeleteRow={handleDeleteRowClick} onEditRow={handleEditRowClick} /></> : <InfoLoginPage onAuthorization={handleAuthorizationClick} />} />
         <Route path='/login' element={<Login onLogin={handleLoginClick} />} />
-        <Route path='*' element={<NotFound onBack={goBack}/>} />
+        <Route path='*' element={<NotFound onBack={goBack} />} />
       </Routes>
       <Preloader isOpen={isLoading} />
-      <InfoToolTip isOpen={isInfoTooltipOpen} onClose={closeInfoToolTip} />
+      <InfoToolTip isInfoTooltipOpen={isInfoTooltipOpen} onClose={closeInfoToolTip} />
     </div>
   );
 }

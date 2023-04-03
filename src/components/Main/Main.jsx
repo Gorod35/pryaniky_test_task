@@ -56,7 +56,7 @@ export default function Main({ tablerows, onAddRow, onDeleteRow, onEditRow, isSu
   const handleAddRowClick = () => {
     onAddRow(values);
     handleCloseForm();
-    isSuccess && setValues(InitialValues)
+    setValues(InitialValues)
   }
 
   const handleDeleteRowClick = (id) => {
