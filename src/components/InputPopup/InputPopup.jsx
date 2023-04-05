@@ -18,7 +18,7 @@ export default function FormDialog( { handleAddRowClick, handleEditRowClick, isO
   return (
     <div>
       <Dialog open={isOpen} onClose={onClose}>
-        <DialogContent sx={{minWidth: '420px'}}>
+        <DialogContent sx={{maxWidth: '420px'}}>
           {inputs.filter(ifFormValue).map((input) =>  (
             <TextField key={input.id} {...input} value={values[input.name]} onChange={handleChange} autoFocus margin="dense" fullWidth variant="standard"/>
           ))}
